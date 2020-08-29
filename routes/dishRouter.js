@@ -5,6 +5,24 @@ const dishRouter = express.Router();
 
 dishRouter.use(bodyParser.json());
 
+
+dishRouter.route('/:dishId')
+.get((req,res,next) => {
+    res.end('Dishes: '+ req.params.dishId);
+})
+.post((req, res, next) => {
+    res.statusCode = 403;
+    res.end('Post operation not supported ' + req.params.dishId);
+})
+.put((req, res, next) => {
+    res.write('Dish updated  ' + req.params.dishId);
+    res.end('Updating the dish: ' + req.body.name + ' with details as: ' + req.body.description);
+})
+.delete((req, res, next) => {
+    res.end('Deleting the dish with id:' + req.params.dishId);
+});
+
+
 dishRouter.route('/')
 .all((req,res,next) => {
     res.statusCode = 200;

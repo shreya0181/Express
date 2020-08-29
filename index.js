@@ -9,9 +9,11 @@ const morgan = require('morgan');
 const app = express();
 
 const dishRouter = require('./routes/dishRouter');
-
+const promoRouter = require('./routes/promorouter');
+const leaderRouter = require('./routes/leaderRouter');
 app.use('/dishes', dishRouter);
-
+app.use('/promos', promoRouter);
+app.use('/leader', leaderRouter);
 
 app.use(morgan('dev'));
 
@@ -31,6 +33,22 @@ app.all('/dishes', (req,res,next) => {
 
 
 
+app.get('/dishes', (req,res,next) => {
+  res.end('Will send all the dishes to you!');
+});
+
+app.post('/dishes', (req, res, next) => {
+res.end('Will add the dish: ' + req.body.name + ' with details: ' + req.body.description);
+});
+
+app.put('/dishes', (req, res, next) => {
+res.statusCode = 403;
+res.end('PUT operation not supported on /dishes');
+});
+
+app.delete('/dishes', (req, res, next) => {
+  res.end('Deleting all dishes');
+});
 
 app.get('/dishes/:dishId', (req,res,next) => {
     res.end('Will send details of the dish: ' + req.params.dishId +' to you!');
