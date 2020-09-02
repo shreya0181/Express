@@ -31,7 +31,9 @@ app.all('/dishes', (req,res,next) => {
 });
 // using next passing the modified req, res
 
-
+app.get('/', (req,res,next) => {
+  res.end('Express Server');
+});
 
 app.get('/dishes', (req,res,next) => {
   res.end('Will send all the dishes to you!');
