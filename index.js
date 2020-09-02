@@ -7,6 +7,20 @@ const port = 3000;
 // morgan writes the required by the header 
 const morgan = require('morgan');
 const app = express();
+const mongoose= require('mongoose');
+const Dishes = require('./models/dishes');
+
+const URL= 'mongodb://localhost:27017/conFusion';
+const connect = mongoose.connect(URL);
+
+
+connect.then((db)=>{
+
+  console.log('connected to the server');
+}, (err)=>{
+  console.log(err);
+});
+
 
 const dishRouter = require('./routes/dishRouter');
 const promoRouter = require('./routes/promorouter');
@@ -14,6 +28,7 @@ const leaderRouter = require('./routes/leaderRouter');
 app.use('/dishes', dishRouter);
 app.use('/promos', promoRouter);
 app.use('/leader', leaderRouter);
+
 
 app.use(morgan('dev'));
 
