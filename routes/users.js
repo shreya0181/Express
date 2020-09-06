@@ -8,6 +8,7 @@ const { token } = require('morgan');
 
 var router = express.Router();
 router.use(bodyParser.json());
+var passport = require('passport');
 
 /* GET users listing. */
 router.get('/', cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, function(req, res, next) {
@@ -18,6 +19,30 @@ router.get('/', cors.corsWithOptions, authenticate.verifyUser, authenticate.veri
     res.json(users);
   });
 });
+
+router.post('/signup', (req, res, next) => {
+    User.register(new User({username: req.body.username}), 
+      req.body.password, (err, user) => {
+      if(err) {
+        res.statusCode = 500;
+        res.setHeader('Content-Type', 'application/json');
+        res.json({err: err});
+      }
+      else {
+        passport.authenticate('local')(req, res, () => {
+          res.statusCode = 200;
+          res.setHeader('Content-Type', 'application/json');
+          res.json({success: true, status: 'Registration Successful!'});
+        });
+      }
+    });
+  });
+  
+  router.post('/login', passport.authenticate('local'), (req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json({success: true, status: 'You are successfully logged in!'});
+  });
 
 router.post('/signup', cors.corsWithOptions, function(req, res, next){
 

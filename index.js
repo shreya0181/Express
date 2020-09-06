@@ -4,6 +4,8 @@ const express = require('express'),
 const hostname = 'localhost';
 const port = 3000;
 
+var passport = require('passport');
+var authenticate = require('./authenticate');
 // morgan writes the required by the header 
 const morgan = require('morgan');
 const app = express();
@@ -12,6 +14,8 @@ const Dishes = require('./models/dishes');
 
 var session = require('express-session');
 var FileStore=  require('session-file-store')(session);
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 const URL= 'mongodb://localhost:27017/conFusion';
@@ -65,6 +69,18 @@ function auth (req, res, next) {
 }
 app.use(auth);
 
+function auth (req, res, next) {
+  console.log(req.user);
+
+  if (!req.user) {
+    var err = new Error('You are not authenticated!');
+    err.status = 403;
+    next(err);
+  }
+  else {
+        next();
+  }
+}
 
 connect.then((db)=>{
 
